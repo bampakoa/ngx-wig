@@ -1,4 +1,4 @@
-import { Component, signal, ViewChild } from '@angular/core';
+import { Component, signal, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed, tick, waitForAsync } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 
@@ -12,6 +12,7 @@ const mockWindow = {};
     template: `<ngx-wig
     [(ngModel)]="text">
   </ngx-wig>`,
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 class TestNgModelHostComponent {
@@ -27,6 +28,7 @@ class TestNgModelHostComponent {
     buttons="bold,italic"
     [disabled]="false">
   </ngx-wig>`,
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 class TestHostComponent {

@@ -16,6 +16,7 @@ import {
   signal,
   viewChild,
   viewChildren,
+  ChangeDetectionStrategy
 } from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { CommandFunction, TButton } from "./config";
@@ -36,6 +37,7 @@ import { NgxWigToolbarService } from "./ngx-wig-toolbar.service";
     },
   ],
   encapsulation: ViewEncapsulation.None,
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class NgxWigComponent
@@ -71,7 +73,7 @@ export class NgxWigComponent
   public readonly hasFocus = signal(false);
   public readonly toolbarButtonIndex = signal<number>(0);
 
-  private readonly _mutationObserver: MutationObserver;
+  private readonly _mutationObserver!: MutationObserver;
 
   private readonly toolbarButtonElems = viewChildren("toolbarButton", {
     read: ElementRef,
@@ -82,7 +84,7 @@ export class NgxWigComponent
     @Optional() private readonly _filterService: NgxWigFilterService,
     // cannot set Document here - Angular issue - https://github.com/angular/angular/issues/20351
     @Inject(DOCUMENT) private readonly document: Document,
-    @Inject("WINDOW") private readonly window,
+    @Inject("WINDOW") private readonly window: Window,
   ) {}
 
   private executeCommand(command: string, value: string = ""): boolean {
@@ -385,12 +387,12 @@ export class NgxWigComponent
     target?.nativeElement.focus();
   }
 
-  private pasteHtmlAtCaret(html) {
-    let sel;
+  private pasteHtmlAtCaret(html: string) {
+    let sel: Selection;
     let range;
 
     if (window.getSelection) {
-      sel = window.getSelection();
+      sel = window.getSelection()!;
       if (sel.getRangeAt && sel.rangeCount) {
         range = sel.getRangeAt(0);
         range.deleteContents();
