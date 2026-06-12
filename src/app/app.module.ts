@@ -11,14 +11,14 @@ export const DEFAULT_LIBRARY_BUTTONS = {
     title: 'Bold',
     command: 'bold',
     styleClass: 'bold',
-    icon: 'icon-bold'
+    icon: 'nwe-icon-bold'
   },
   italic: {
     label: 'I',
     title: 'Italic',
     command: 'italic',
     styleClass: 'italic',
-    icon: 'icon-italic'
+    icon: 'nwe-icon-italic'
   },
   fontName: {
     label: 'F',
