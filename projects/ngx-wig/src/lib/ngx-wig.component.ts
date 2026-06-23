@@ -41,7 +41,7 @@ import { NgxWigToolbarService } from "./ngx-wig-toolbar.service";
   standalone: false,
 })
 export class NgxWigComponent
-  implements OnInit, OnChanges, OnDestroy, ControlValueAccessor
+  implements OnInit, OnChanges, ControlValueAccessor
 {
   public readonly content = model<string>();
 
@@ -72,8 +72,6 @@ export class NgxWigComponent
   });
   public readonly hasFocus = signal(false);
   public readonly toolbarButtonIndex = signal<number>(0);
-
-  private readonly _mutationObserver!: MutationObserver;
 
   private readonly toolbarButtonElems = viewChildren("toolbarButton", {
     read: ElementRef,
@@ -158,12 +156,6 @@ export class NgxWigComponent
     const content = this.content();
     if (content) {
       this.container().innerHTML = content;
-    }
-  }
-
-  public ngOnDestroy(): void {
-    if (this._mutationObserver) {
-      this._mutationObserver.disconnect();
     }
   }
 
@@ -388,11 +380,10 @@ export class NgxWigComponent
   }
 
   private pasteHtmlAtCaret(html: string) {
-    let sel: Selection;
     let range;
 
     if (window.getSelection) {
-      sel = window.getSelection()!;
+      const sel = window.getSelection()!;
       if (sel.getRangeAt && sel.rangeCount) {
         range = sel.getRangeAt(0);
         range.deleteContents();
