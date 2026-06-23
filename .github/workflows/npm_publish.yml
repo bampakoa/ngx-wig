@@ -12,7 +12,7 @@ jobs:
       - uses: actions/checkout@v4 # Updated to use v2
       - uses: actions/setup-node@v4 # Updated to use v3
         with:
-          node-version: 20
+          node-version: 24
           registry-url: 'https://registry.npmjs.org/' # Added for npm to configure auth
       - name: Install Angular CLI
         run: npm install -g @angular/cli @angular/core

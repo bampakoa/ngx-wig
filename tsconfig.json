@@ -17,7 +17,8 @@
       "ngx-wig": ["dist/ngx-wig"],
       "ngx-wig/*": ["dist/ngx-wig/*"]
     },
-    "useDefineForClassFields": false
+    "useDefineForClassFields": false,
+    "ignoreDeprecations": "6.0"
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,

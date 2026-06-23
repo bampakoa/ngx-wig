@@ -1,8 +1,6 @@
-import { Injectable } from '@angular/core';
+import { Service } from '@angular/core';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Service()
 export class NgxWigFilterService {
   constructor() {}
   public filter(content: string): string {
@@ -57,7 +55,7 @@ export class NgxWigFilterService {
   // --- Helper: Mark underlined spans by class or inline style ---
   private _markUnderlineSpans(html: string, underlineClasses: string[]): string {
     if (underlineClasses.length > 0) {
-      html = html.replace(/<span([^>]*)class=["']([^"']+)["']([^>]*)>([\s\S]*?)<\/span>/gi, (match, p1, classAttr, p3, content) => {
+      html = html.replace(/<span([^>]*)class=["']([^"']+)["']([^>]*)>([\s\S]*?)<\/span>/gi, (match, p1, classAttr: string, p3, content) => {
         const classes = classAttr.split(/\s+/);
         if (classes.some(cls => underlineClasses.includes(cls)) && classes.every(cls => underlineClasses.includes(cls) || cls === 's2' || cls === 's3')) {
           return `<u>${content}</u>`;
