@@ -156,11 +156,13 @@
           }
         },
         "test": {
-          "builder": "@angular-devkit/build-angular:karma",
+          "builder": "@angular/build:karma",
           "options": {
-            "main": "projects/ngx-wig/src/test.ts",
-            "tsConfig": "projects/ngx-wig/tsconfig.spec.json",
-            "karmaConfig": "projects/ngx-wig/karma.conf.js"
+            "polyfills": [
+              "zone.js",
+              "zone.js/testing"
+            ],
+            "tsConfig": "projects/ngx-wig/tsconfig.spec.json"
           }
         },
         "lint": {
