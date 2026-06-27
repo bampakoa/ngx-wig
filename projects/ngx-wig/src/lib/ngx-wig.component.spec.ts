@@ -16,7 +16,7 @@ const mockWindow = {};
     standalone: false
 })
 class TestNgModelHostComponent {
-  @ViewChild(NgxWigComponent) ngxWigCmp: NgxWigComponent;
+  @ViewChild(NgxWigComponent) ngxWigCmp!: NgxWigComponent;
 
   text = 'Fake content (ngModel)';
 }
@@ -32,7 +32,7 @@ class TestNgModelHostComponent {
     standalone: false
 })
 class TestHostComponent {
-  @ViewChild(NgxWigComponent) ngxWigCmp: NgxWigComponent;
+  @ViewChild(NgxWigComponent) ngxWigCmp!: NgxWigComponent;
 
   text = signal('Fake content');
 

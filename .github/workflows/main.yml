@@ -1,4 +1,4 @@
-name: test 
+name: Unit tests 
 on:
   pull_request:
     branches: [ master ]
@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [20.x]
+        node-version: [24.x]
     steps:
     - uses: actions/checkout@v2
     - name: Use Node.js ${{ matrix.node-version }}
