@@ -2,11 +2,11 @@
   "name": "ngx-wig-app",
   "version": "0.0.0",
   "scripts": {
-    "start": "(ng build ngx-wig --watch ) & sleep 10 && ng serve",
-    "build": "ng build ngx-wig --configuration production",
-    "test": "ng test ngx-wig --browsers=ChromeHeadless --watch=false",
-    "lint": "ng lint ngx-wig",
-    "package": "ng build ngx-wig --configuration production && cp ./README.md ./dist/ngx-wig && cd dist/ngx-wig && npm pack"
+    "ng": "ng",
+    "start": "ng serve",
+    "build": "ng build",
+    "watch": "ng build --watch --configuration development",
+    "test": "ng test --watch=false"
   },
   "private": true,
   "dependencies": {
