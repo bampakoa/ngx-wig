@@ -1,35 +1,11 @@
-# ngx-wig
-
-[![Build Status](https://travis-ci.org/stevermeister/ngx-wig.svg?branch=master)](https://travis-ci.org/stevermeister/ngx-wig)
+# Ngx-wig
 
 ![screen shot 2017-12-12 at 14 52 51](https://user-images.githubusercontent.com/1526680/33888069-37bde1f0-df4c-11e7-993e-d48ffe0fffbf.png)
 
-## Dependencies
 
-*it's only Angular! No jQuery or other WYSIWYG monsters*
+## Angular Support
 
-
-## Angular Support (older than the latest version)
-
-For **Angular 21** `ngx-wig@21`
-
-For **Angular 20** `ngx-wig@20`
-
-For **Angular 19** `ngx-wig@19`
-
-For **Angular 18** `ngx-wig@18`
-
-For **Angular 17** `ngx-wig@17`
-
-For **Angular 16** `ngx-wig@16`
-
-For **Angular 15** `ngx-wig@15`
-
-For **Angular 14** `ngx-wig@14`
-
-For **Angular 13** `ngx-wig@13` 
-
-...
+Library versions are directly compatible with the respective Angular version (e.g. For **Angular 21** `npm install ngx-wig@21`)
 
 ## Icons
 
@@ -39,22 +15,22 @@ We recommend to use [Material Design Icons](https://cdn.materialdesignicons.com/
 
 If you do not want to use a full icons set, you can use these steps:
 
-1. go to [icons set](https://materialdesignicons.com/)
-1. choose the icon that you want, press the right mouse button on it, and then select the "View SVG" option
-1. go to [URL-encoder for SVG](https://yoksel.github.io/url-encoder/) and use it to convert your SVG
+1. Go to [icons set](https://materialdesignicons.com/)
+1. Choose the icon that you want, press the right mouse button on it, and then select the "View SVG" option
+1. Go to [URL-encoder for SVG](https://yoksel.github.io/url-encoder/) and use it to convert your SVG
 
 ## Installation
 
-ngx-wig could be simply installed via npm:
+Ngx-wig could be simply installed via npm:
 
     npm install ngx-wig
 
 
 ## Usage
 
-First, import the ngx-wig to your module:
+First, import the `ngx-wig` to your module:
 
-```typescript
+```ts
 import {NgxWigModule} from 'ngx-wig';
 
 @NgModule({
@@ -65,8 +41,6 @@ import {NgxWigModule} from 'ngx-wig';
 it's just an attribute directive for textarea:
 
 ```html
-<link href="https://cdn.materialdesignicons.com/2.1.19/css/materialdesignicons.min.css" rel="stylesheet" />
-...
 <ngx-wig [content]="text1"></ngx-wig>
 ```
 
@@ -84,7 +58,7 @@ it's just an attribute directive for textarea:
 <ngx-wig [content]="text1" [placeholder]="'Enter instructions here.'"></ngx-wig>
 ```
 
-### ngModel sync ( [demo](https://stackblitz.com/edit/stackblitz-starters-go26xc?file=src%2Fmain.ts) )
+### Template forms ( [demo](https://stackblitz.com/edit/stackblitz-starters-go26xc?file=src%2Fmain.ts) )
 
 ```html
 <ngx-wig [(ngModel)]="text1"></ngx-wig>
@@ -104,7 +78,7 @@ it's just an attribute directive for textarea:
 <div [innerHTML]="result"></div>
 ```
 
-### Reactive FormControl ( [demo](https://stackblitz.com/edit/stackblitz-starters-hgna7m?file=src%2Fmain.ts) )
+### Reactive forms ( [demo](https://stackblitz.com/edit/stackblitz-starters-hgna7m?file=src%2Fmain.ts) )
 
 ```html
 <ngx-wig [formControl]="text1"></ngx-wig>
@@ -127,10 +101,8 @@ providers: [{ provide: NgxWigFilterService, useClass: NgxWigFilterStylesService}
 
 ## Development
 
-To generate all `*.js`, `*.d.ts` and `*.metadata.json` files:
-
 ```bash
-$ npm run build
+$ npm start
 ```
 
 To lint all `*.ts` files:
@@ -144,7 +116,3 @@ To run all tests:
 ```bash
 $ npm run test
 ```
-
-## License
-
-MIT © [Stepan Suvorov](https://github.com/stevermeister)
