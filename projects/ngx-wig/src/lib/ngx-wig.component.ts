@@ -1,12 +1,9 @@
-import { DOCUMENT } from "@angular/common";
+import { DOCUMENT } from '@angular/common';
 import {
   Component,
   ElementRef,
-  Inject,
   OnChanges,
-  OnDestroy,
   OnInit,
-  Optional,
   SimpleChanges,
   ViewEncapsulation,
   computed,
@@ -18,77 +15,63 @@ import {
   viewChildren,
   ChangeDetectionStrategy,
   inject
-} from "@angular/core";
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
-import { CommandFunction, TButton } from "./config";
-import { NgxWigFilterService } from "./ngx-wig-filter.service";
-import { NgxWigToolbarService } from "./ngx-wig-toolbar.service";
+} from '@angular/core';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { CommandFunction, TButton } from './config';
+import { NgxWigFilterService } from './ngx-wig-filter.service';
+import { NgxWigToolbarService } from './ngx-wig-toolbar.service';
 
-/** @dynamic */
 @Component({
-  selector: "ngx-wig",
-  templateUrl: "./ngx-wig-component.html",
-  styleUrls: ["./ngx-wig-component.css"],
+  selector: 'ngx-wig',
+  templateUrl: './ngx-wig-component.html',
+  styleUrls: ['./ngx-wig-component.css'],
   providers: [
     NgxWigToolbarService,
     {
       provide: NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => NgxWigComponent),
-      multi: true,
+      multi: true
     },
   ],
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  standalone: false
 })
 export class NgxWigComponent implements OnInit, OnChanges, ControlValueAccessor{
-  private _ngWigToolbarService = inject(NgxWigToolbarService);
-  private _filterService = inject(NgxWigFilterService, { optional: true });
+  private ngWigToolbarService = inject(NgxWigToolbarService);
+  private filterService = inject(NgxWigFilterService, { optional: true });
   private document = inject(DOCUMENT);
+  private readonly toolbarButtonElems = viewChildren('toolbarButton', { read: ElementRef});
 
-  public readonly content = model<string>();
-
-  public readonly placeholder = input<string>();
-
-  public readonly buttons = input<string>();
-
-  public readonly disabled = model(false);
-
-  public readonly ngxWigEditable = viewChild.required("ngWigEditable", {
-    read: ElementRef,
-  });
-
-  public readonly editMode = signal(false);
-
-  public readonly container = computed<HTMLElement>(
-    () => this.ngxWigEditable().nativeElement,
-  );
-  public readonly toolbarButtons = computed<TButton[]>(() => {
+  readonly content = model<string>();
+  readonly placeholder = input<string>();
+  readonly buttons = input<string>();
+  readonly disabled = model(false);
+  readonly ngxWigEditable = viewChild.required('ngWigEditable', { read: ElementRef });
+  readonly editMode = signal(false);
+  readonly container = computed<HTMLElement>(() => this.ngxWigEditable().nativeElement);
+  readonly toolbarButtons = computed(() => {
     const buttons = this.buttons();
-    const toolbarButtons = this._ngWigToolbarService.getToolbarButtons(buttons);
-    toolbarButtons.forEach((b) => {
+    const toolbarButtons = this.ngWigToolbarService.getToolbarButtons(buttons);
+    toolbarButtons.forEach(b => {
       if (!b.children?.length) return;
       b.dropdownButtonIndex = 0;
     });
 
     return toolbarButtons;
   });
-  public readonly hasFocus = signal(false);
-  public readonly toolbarButtonIndex = signal<number>(0);
+  readonly hasFocus = signal(false);
+  readonly toolbarButtonIndex = signal(0);
 
-  private readonly toolbarButtonElems = viewChildren("toolbarButton", {
-    read: ElementRef,
-  });
-
-  private executeCommand(command: string, value: string = ""): boolean {
+  private executeCommand(command: string, value: string = '') {
     try {
-      if (this.container().contentEditable !== "true") {
+      if (this.container().contentEditable !== 'true') {
         return false;
       }
 
       // For now, use execCommand for backward compatibility
       // TODO: Replace with modern APIs when execCommand is fully deprecated
-      if (command === "unlink") {
+      if (command === 'unlink') {
         this.document.execCommand(command, false);
       } else {
         this.document.execCommand(command, false, value);
@@ -100,11 +83,8 @@ export class NgxWigComponent implements OnInit, OnChanges, ControlValueAccessor{
     }
   }
 
-  public execCommand(
-    command: string | CommandFunction | undefined,
-    options?: string,
-  ): boolean {
-    if (typeof command === "function") {
+  execCommand(command: string | CommandFunction | undefined, options?: string,) {
+    if (typeof command === 'function') {
       command(this);
       return true;
     }
@@ -113,7 +93,7 @@ export class NgxWigComponent implements OnInit, OnChanges, ControlValueAccessor{
       return false;
     }
 
-    if (typeof command !== "string" || !command) {
+    if (typeof command !== 'string' || !command) {
       return false;
     }
 
@@ -121,11 +101,8 @@ export class NgxWigComponent implements OnInit, OnChanges, ControlValueAccessor{
       throw new Error(`The command "${command}" is not supported`);
     }
 
-    if (
-      (command === "createlink" && !this.isLinkSelected()) ||
-      command === "insertImage"
-    ) {
-      options = window.prompt("Please enter the URL", "http://") ?? "";
+    if ((command === 'createlink' && !this.isLinkSelected()) || command === 'insertImage') {
+      options = window.prompt('Please enter the URL', 'http://') ?? '';
       if (!options) {
         return false;
       }
@@ -134,10 +111,10 @@ export class NgxWigComponent implements OnInit, OnChanges, ControlValueAccessor{
     this.container().focus();
 
     let success = false;
-    if (command === "createlink" && this.isLinkSelected()) {
-      success = this.executeCommand("unlink");
+    if (command === 'createlink' && this.isLinkSelected()) {
+      success = this.executeCommand('unlink');
     } else {
-      success = this.executeCommand(command, options ?? "");
+      success = this.executeCommand(command, options ?? '');
     }
 
     if (success) {
@@ -147,35 +124,33 @@ export class NgxWigComponent implements OnInit, OnChanges, ControlValueAccessor{
     return success;
   }
 
-  public ngOnInit(): void {
+  ngOnInit() {
     const content = this.content();
     if (content) {
       this.container().innerHTML = content;
     }
   }
 
-  public onContentChange(newContent: string): void {
-    this.content.set(this.isInnerTextEmpty(newContent) ? "" : newContent);
+  onContentChange(newContent: string) {
+    this.content.set(this.isInnerTextEmpty(newContent) ? '' : newContent);
 
     this.propagateChange(this.content());
   }
 
-  public ngOnChanges(changes: SimpleChanges): void {
+  ngOnChanges(changes: SimpleChanges) {
     const container = this.container();
-    if (container && changes["content"]) {
+    if (container && changes['content']) {
       // we need to focus the container before pasting at the caret
       container.focus();
 
       // clear the previous content
-      container.innerHTML = "";
+      container.innerHTML = '';
 
       // add the new content
-      if (this._filterService) {
-        this.pasteHtmlAtCaret(
-          this._filterService.filter(changes["content"].currentValue),
-        );
+      if (this.filterService) {
+        this.pasteHtmlAtCaret(this.filterService.filter(changes['content'].currentValue));
       } else {
-        this.pasteHtmlAtCaret(changes["content"].currentValue);
+        this.pasteHtmlAtCaret(changes['content'].currentValue);
       }
     }
   }
@@ -184,12 +159,12 @@ export class NgxWigComponent implements OnInit, OnChanges, ControlValueAccessor{
     event.preventDefault();
 
     const text =
-      event.clipboardData?.getData("text/html") ||
-      event.clipboardData?.getData("text/plain") ||
-      "";
+      event.clipboardData?.getData('text/html') ||
+      event.clipboardData?.getData('text/plain') ||
+      '';
 
-    if (this._filterService) {
-      this.pasteHtmlAtCaret(this._filterService.filter(text));
+    if (this.filterService) {
+      this.pasteHtmlAtCaret(this.filterService.filter(text));
     } else {
       this.pasteHtmlAtCaret(text);
     }
@@ -197,61 +172,60 @@ export class NgxWigComponent implements OnInit, OnChanges, ControlValueAccessor{
     this.onContentChange(this.container().innerHTML);
   }
 
-  public onTextareaChange(newContent: string): void {
-    // model -> view
+  onTextareaChange(newContent: string) {
     this.container().innerHTML = newContent;
     this.onContentChange(newContent);
   }
 
-  public writeValue(value: any): void {
-    value = value ?? "";
+  writeValue(value: any) {
+    value = value ?? '';
     this.container().innerHTML = value;
     this.content.set(value);
   }
 
-  public shouldShowPlaceholder(): boolean {
+  shouldShowPlaceholder() {
     return !!this.placeholder() && !this.container().innerText;
   }
 
-  public registerOnChange(fn: any): void {
+  registerOnChange(fn: any) {
     this.propagateChange = fn;
   }
 
-  public registerOnTouched(fn: () => void): void {
+  registerOnTouched(fn: () => void) {
     this.propagateTouched = fn;
   }
 
-  public propagateTouched = () => {};
+  propagateTouched = () => {};
 
-  public onBlur() {
+  onBlur() {
     this.hasFocus.set(false);
     this.propagateTouched();
   }
 
-  public setDisabledState(isDisabled: boolean): void {
+  setDisabledState(isDisabled: boolean) {
     this.disabled.set(isDisabled);
   }
 
-  public isInnerTextEmpty(content: string): boolean {
+  isInnerTextEmpty(content: string) {
     const parser = new DOMParser();
-    const htmlDoc = parser.parseFromString(content, "text/html");
+    const htmlDoc = parser.parseFromString(content, 'text/html');
 
-    return htmlDoc.documentElement?.innerText === "";
+    return htmlDoc.documentElement?.innerText === '';
   }
 
-  public isLinkSelected(): boolean {
-    if (window.getSelection()?.toString() === "") return false;
+  isLinkSelected() {
+    if (window.getSelection()?.toString() === '') return false;
 
     const selection = window.getSelection();
     if (!selection) return false;
 
     return (
-      selection.focusNode?.parentNode?.nodeName === "A" ||
-      selection.anchorNode?.parentNode?.nodeName === "A"
+      selection.focusNode?.parentNode?.nodeName === 'A' ||
+      selection.anchorNode?.parentNode?.nodeName === 'A'
     );
   }
 
-  public onDropdownButtonSelected(button: TButton, event?: Event): void {
+  onDropdownButtonSelected(button: TButton, event?: Event) {
     event?.preventDefault();
 
     if (button.isOpenOnMouseOver) return;
@@ -261,38 +235,30 @@ export class NgxWigComponent implements OnInit, OnChanges, ControlValueAccessor{
     }
     button.visibleDropdown = true;
     button.dropdownButtonIndex = 0;
-    const dropdown = (event?.currentTarget as HTMLElement)?.querySelector(
-      ".nwe-dropdown-content",
-    );
-    const buttons = Array.from(
-      dropdown?.querySelectorAll("button") ?? [],
-    ) as HTMLElement[];
+    const dropdown = (event?.currentTarget as HTMLElement)?.querySelector('.nwe-dropdown-content',);
+    const buttons = Array.from(dropdown?.querySelectorAll('button') ?? []);
     buttons[0]?.focus();
   }
 
-  public onDropdownKeydown(event: KeyboardEvent, button: TButton): void {
-    const dropdown = (event.currentTarget as HTMLElement).closest(
-      ".nwe-dropdown-content",
-    );
-    const buttons = Array.from(
-      dropdown?.querySelectorAll("button") ?? [],
-    ) as HTMLElement[];
-    const index = buttons.indexOf(event.currentTarget as HTMLElement);
+  onDropdownKeydown(event: KeyboardEvent, button: TButton) {
+    const dropdown = (event.currentTarget as HTMLElement).closest('.nwe-dropdown-content');
+    const buttons = Array.from(dropdown?.querySelectorAll('button') ?? []);
+    const index = buttons.indexOf(event.currentTarget as HTMLButtonElement);
     if (index === -1) {
       return;
     }
     const lastIndex = buttons.length - 1;
     let newIndex = index;
     switch (event.key) {
-      case "ArrowDown":
+      case 'ArrowDown':
         event.preventDefault();
         newIndex = (index + 1) % buttons.length;
         break;
-      case "ArrowUp":
+      case 'ArrowUp':
         event.preventDefault();
         newIndex = (index - 1 + buttons.length) % buttons.length;
         break;
-      case "Tab":
+      case 'Tab':
         if (event.shiftKey) {
           if (index === 0) {
             return;
@@ -307,7 +273,7 @@ export class NgxWigComponent implements OnInit, OnChanges, ControlValueAccessor{
           newIndex = index + 1;
         }
         break;
-      case "Escape":
+      case 'Escape':
         event.preventDefault();
         this.closeDropdown(button);
         return;
@@ -318,12 +284,12 @@ export class NgxWigComponent implements OnInit, OnChanges, ControlValueAccessor{
     buttons[newIndex].focus();
   }
 
-  public closeDropdown(button: TButton): void {
+  closeDropdown(button: TButton) {
     button.visibleDropdown = false;
     this.focusToolbarButton(button);
   }
 
-  private focusToolbarButton(button: TButton): void {
+  private focusToolbarButton(button: TButton) {
     const index = this.toolbarButtons().indexOf(button);
     if (index === -1) {
       return;
@@ -333,7 +299,7 @@ export class NgxWigComponent implements OnInit, OnChanges, ControlValueAccessor{
     buttons?.[index]?.nativeElement.focus();
   }
 
-  public onToolbarKeydown(event: KeyboardEvent, index: number): void {
+  onToolbarKeydown(event: KeyboardEvent, index: number) {
     const buttons = this.toolbarButtonElems();
     if (!buttons || buttons.length === 0) {
       return;
@@ -341,17 +307,17 @@ export class NgxWigComponent implements OnInit, OnChanges, ControlValueAccessor{
     const lastIndex = buttons.length - 1;
 
     switch (event.key) {
-      case "ArrowRight":
+      case 'ArrowRight':
         event.preventDefault();
         this.toolbarButtonIndex.set((index + 1) % buttons.length);
         break;
-      case "ArrowLeft":
+      case 'ArrowLeft':
         event.preventDefault();
         this.toolbarButtonIndex.set(
           (index - 1 + buttons.length) % buttons.length,
         );
         break;
-      case "Tab":
+      case 'Tab':
         if (event.shiftKey) {
           if (index === 0) {
             return;
@@ -384,7 +350,7 @@ export class NgxWigComponent implements OnInit, OnChanges, ControlValueAccessor{
         range.deleteContents();
 
         // append the content in a temporary div
-        const el = this.document.createElement("div");
+        const el = this.document.createElement('div');
         el.innerHTML = html;
 
         const frag = this.document.createDocumentFragment();
@@ -408,29 +374,29 @@ export class NgxWigComponent implements OnInit, OnChanges, ControlValueAccessor{
     }
   }
 
-  private isSupportedCommand(command: string): boolean {
+  private isSupportedCommand(command: string) {
     // List of commonly supported commands across modern browsers
     const supportedCommands = [
-      "bold",
-      "italic",
-      "underline",
-      "strikethrough",
-      "subscript",
-      "superscript",
-      "justifycenter",
-      "justifyfull",
-      "justifyleft",
-      "justifyright",
-      "indent",
-      "outdent",
-      "insertorderedlist",
-      "insertunorderedlist",
-      "createlink",
-      "unlink",
-      "inserthtml",
-      "insertimage",
-      "formatblock",
-      "removeformat",
+      'bold',
+      'italic',
+      'underline',
+      'strikethrough',
+      'subscript',
+      'superscript',
+      'justifycenter',
+      'justifyfull',
+      'justifyleft',
+      'justifyright',
+      'indent',
+      'outdent',
+      'insertorderedlist',
+      'insertunorderedlist',
+      'createlink',
+      'unlink',
+      'inserthtml',
+      'insertimage',
+      'formatblock',
+      'removeformat',
     ];
 
     return supportedCommands.includes(command.toLowerCase());

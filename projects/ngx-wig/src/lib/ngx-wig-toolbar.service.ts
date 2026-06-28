@@ -3,18 +3,18 @@ import { TButtonLibrary, TButton, BUTTONS } from './config';
 
 @Service()
 export class NgxWigToolbarService { 
-  private _buttonLibrary = inject(BUTTONS).reduce((acc: TButtonLibrary, val: TButtonLibrary) => ({ ...acc, ...val }), {});
-  private _defaultButtonsList = Object.keys(this._buttonLibrary);
+  private buttonLibrary = inject(BUTTONS).reduce((acc, val) => ({ ...acc, ...val }), {});
+  private defaultButtonsList = Object.keys(this.buttonLibrary);
 
-  public setButtons(buttons: string[]): void {
+  setButtons(buttons: string[]) {
     if (!Array.isArray(buttons)) {
       throw new Error('Argument "buttons" should be an array');
     }
 
-    this._defaultButtonsList = buttons;
+    this.defaultButtonsList = buttons;
   }
 
-  public addStandardButton(
+  addStandardButton(
     name: string,
     title: string,
     command: string,
@@ -26,12 +26,12 @@ export class NgxWigToolbarService {
     }
 
     styleClass = styleClass || '';
-    this._buttonLibrary[name] = { title, command, styleClass, icon };
-    this._defaultButtonsList.push(name);
+    this.buttonLibrary[name] = { title, command, styleClass, icon };
+    this.defaultButtonsList.push(name);
   }
 
-  public getToolbarButtons(buttonsList?: string): TButton[] {
-    let buttons = this._defaultButtonsList;
+  getToolbarButtons(buttonsList?: string) {
+    let buttons = this.defaultButtonsList;
     const toolbarButtons: TButton[] = [];
 
     if (typeof buttonsList !== 'undefined') {
@@ -43,13 +43,13 @@ export class NgxWigToolbarService {
         return;
       }
 
-      if (!this._buttonLibrary[buttonKey]) {
+      if (!this.buttonLibrary[buttonKey]) {
         throw new Error(
-          `There is no "${buttonKey}" in your library. Possible variants: ${Object.keys(this._buttonLibrary)}`
+          `There is no "${buttonKey}" in your library. Possible variants: ${Object.keys(this.buttonLibrary)}`
         );
       }
 
-      const button = Object.assign({}, this._buttonLibrary[buttonKey]);
+      const button = Object.assign({}, this.buttonLibrary[buttonKey]);
       // button.isActive = () => {return !!this.command && document.queryCommandState(this.command);}
       toolbarButtons.push(button);
     });

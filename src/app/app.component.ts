@@ -11,10 +11,10 @@ import { FormControl } from '@angular/forms';
 })
 export class AppComponent {
 
-  public result: any;
+  result: any;
 
   // tslint:disable:max-line-length
-  public text = `There are a few options for making a WYSIWYG editor that works in the browser.
+  text = `There are a few options for making a WYSIWYG editor that works in the browser.
 
   Pure DHTML/JavaScript. Capture mouse input, buttons, keystrokes, etc., and actually edit the HTML of the current document. It's not trivial, but possible.
   Create a custom browser plug-in, Java applet, ActiveX control. This would probably be workable, but would take quite a bit of hackery, and may or may not work. Requiring users to install any sort of plugin is very undesirable.
@@ -23,5 +23,5 @@ export class AppComponent {
   Both Mozilla and Internet Explorer have included ways to make sections of a page editable. IE 5.5 had the MSHTML Editing Platform (archive.org), and Mozilla has its Rich Text Editing API. Both technologies allow Web developers to make parts of a page editable -- in slightly different ways, of course.
   Most current in-browser WYSIWYG editors use the third option.`;
   // tslint:enable:max-line-length
-  public name = new FormControl('some text');
+  name = new FormControl('some text');
 }

@@ -20,12 +20,13 @@ class TestNgModelHostComponent {
 }
 
 @Component({
-    template: `<ngx-wig [(content)]="text"
+  template: `<ngx-wig [(content)]="text"
     placeholder="Enter some text"
     buttons="bold,italic"
-    [disabled]="false" />`,
-    changeDetection: ChangeDetectionStrategy.Eager,
-    standalone: false
+    [disabled]="false" />
+  `,
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: false
 })
 class TestHostComponent {
   readonly ngxWigCmp = viewChild.required(NgxWigComponent);
@@ -38,7 +39,6 @@ class TestHostComponent {
 }
 
 class Page {
-
   execCommandSpy: jasmine.Spy;
   promptSpy: jasmine.Spy;
   focusSpy: jasmine.Spy;
@@ -148,7 +148,7 @@ describe('NgxWigComponent', () => {
       const [first, ...rest] = component.toolbarButtons();
       const modifiedButtons = [{...first, icon: undefined}, ...rest];
       
-      spyOn(component['_ngWigToolbarService'], 'getToolbarButtons').and.returnValue(modifiedButtons)
+      spyOn(component['ngWigToolbarService'], 'getToolbarButtons').and.returnValue(modifiedButtons)
       // trigger recalculation of toolbarButtons
       fixture.componentRef.setInput('buttons', ' ');
       

@@ -2,28 +2,28 @@ import { Service } from '@angular/core';
 
 @Service()
 export class NgxWigFilterService {
-  public filter(content: string): string {
-    return this._cleanWordHtml(content);
+  filter(content: string) {
+    return this.cleanWordHtml(content);
   }
 
   /**
    * Cleans up HTML pasted from Word, converting bullet/numbered lists and removing redundant tags/styles.
    */
-  private _cleanWordHtml(html: string): string {
+  private cleanWordHtml(html: string) {
     // --- 1. Collect underline classes from <style> blocks ---
-    const underlineClasses: string[] = this._getUnderlineClassesFromStyles(html);
+    const underlineClasses = this.getUnderlineClassesFromStyles(html);
 
     // --- 2. Mark underlined spans by class or inline style ---
-    html = this._markUnderlineSpans(html, underlineClasses);
+    html = this.markUnderlineSpans(html, underlineClasses);
 
     // --- 3. Remove unwanted tags, attributes, and whitespace ---
-    html = this._stripWordMetaAndJunk(html);
+    html = this.stripWordMetaAndJunk(html);
 
     // --- 4. Convert <u-mark> to <u> (if any left from previous versions) ---
     html = html.replace(/<u-mark>([\s\S]*?)<\/u-mark>/gi, '<u>$1</u>');
 
     // --- 5. Convert Word lists to <ul>/<ol> and <li> ---
-    html = this._convertWordLists(html);
+    html = this.convertWordLists(html);
 
     // --- 6. Convert links to open in new tab ---
     html = html.replace(/<a [^>]*href="([^"]+)"[^>]*>(.*?)<\/a>/gi, '<a href="$1" target="_blank">$2</a>');
@@ -38,7 +38,7 @@ export class NgxWigFilterService {
   }
 
   // --- Helper: Extract underline classes from <style> blocks ---
-  private _getUnderlineClassesFromStyles(html: string): string[] {
+  private getUnderlineClassesFromStyles(html: string) {
     const underlineClasses: string[] = [];
     const styleBlocks = html.match(/<style[^>]*>[\s\S]*?<\/style>/gi) || [];
     styleBlocks.forEach(styleBlock => {
@@ -52,7 +52,7 @@ export class NgxWigFilterService {
   }
 
   // --- Helper: Mark underlined spans by class or inline style ---
-  private _markUnderlineSpans(html: string, underlineClasses: string[]): string {
+  private markUnderlineSpans(html: string, underlineClasses: string[]) {
     if (underlineClasses.length > 0) {
       html = html.replace(/<span([^>]*)class=["']([^"']+)["']([^>]*)>([\s\S]*?)<\/span>/gi, (match, p1, classAttr: string, p3, content) => {
         const classes = classAttr.split(/\s+/);
@@ -67,7 +67,7 @@ export class NgxWigFilterService {
   }
 
   // --- Helper: Remove meta, style, script, o:p, comments, mso, class/style attrs, empty spans, nbsp, empty <p> ---
-  private _stripWordMetaAndJunk(html: string): string {
+  private stripWordMetaAndJunk(html: string) {
     const tempDiv = document.createElement('div');
     tempDiv.innerHTML = html;
 
@@ -119,9 +119,9 @@ export class NgxWigFilterService {
   }
 
   // --- Helper: Convert Word lists to <ul>/<ol> and <li> ---
-  private _convertWordLists(html: string): string {
+  private convertWordLists(html: string) {
     // 1. Mark bullets and numbers as <li data-list-type="ul"> or <li data-list-type="ol">
-    html = this._convertBulletsToListItems(html);
+    html = this.convertBulletsToListItems(html);
 
     // 2. Group consecutive <li> of the same type into <ul> or <ol>
     html = html.replace(/((<li data-list-type="(ul|ol)">[\s\S]*?<\/li>\s*)+)/gi, (match) => {
@@ -157,7 +157,7 @@ export class NgxWigFilterService {
     return html;
   }
 
-  private _convertBulletsToListItems(html: string): string {
+  private convertBulletsToListItems(html: string) {
     const tempDiv = document.createElement('div');
     tempDiv.innerHTML = html;
 
@@ -170,13 +170,11 @@ export class NgxWigFilterService {
       const text = el.textContent?.trim() || '';
 
       if (bulletRegex.test(text)) {
-        const cleaned = text.replace(bulletRegex, '');
         const li = document.createElement('li');
         li.setAttribute('data-list-type', 'ul');
         li.innerHTML = el.innerHTML.replace(bulletRegex, '');
         el.replaceWith(li);
       } else if (numberRegex.test(text)) {
-        const cleaned = text.replace(numberRegex, '');
         const li = document.createElement('li');
         li.setAttribute('data-list-type', 'ol');
         li.innerHTML = el.innerHTML.replace(numberRegex, '');

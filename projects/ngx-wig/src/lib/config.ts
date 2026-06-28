@@ -77,9 +77,8 @@ export const CUSTOM_LIBRARY_BUTTONS: TButtonLibrary = {
       ctx.editMode.update(e => !e);
     },
     styleClass: 'nw-button--source',
-    icon: '',
+    icon: ''
   }
 };
-
 
 export const BUTTONS = new InjectionToken<TButtonLibrary[]>('BUTTONS');

@@ -2,10 +2,9 @@ import { CommonModule } from '@angular/common';
 import { NgModule, ModuleWithProviders } from '@angular/core';
 import { NgxWigComponent } from './ngx-wig.component';
 import { FormsModule } from '@angular/forms';
-import { TButtonLibrary, DEFAULT_LIBRARY_BUTTONS, BUTTONS, CUSTOM_LIBRARY_BUTTONS } from './config';
+import { TButtonLibrary, DEFAULT_LIBRARY_BUTTONS, BUTTONS } from './config';
 
-
-export const getWindowObject = (): Window => window;
+export const getWindowObject = () => window;
 
 @NgModule({
   declarations: [
@@ -13,16 +12,15 @@ export const getWindowObject = (): Window => window;
   ],
   imports: [
     CommonModule,
-    FormsModule,
+    FormsModule
   ],
   exports: [NgxWigComponent],
   providers: [
     { provide: BUTTONS, multi: true, useValue: DEFAULT_LIBRARY_BUTTONS },
-    { provide: 'WINDOW', useFactory: getWindowObject },
+    { provide: 'WINDOW', useFactory: getWindowObject }
   ]
 })
 export class NgxWigModule {
-
   static forRoot(config?: { buttonsConfig: TButtonLibrary } ): ModuleWithProviders<NgxWigModule> {
     return {
       ngModule: NgxWigModule,
@@ -31,12 +29,12 @@ export class NgxWigModule {
           provide: BUTTONS,
           multi: true, useValue: ((!config || !config?.buttonsConfig) ? DEFAULT_LIBRARY_BUTTONS : config?.buttonsConfig)
         },
-        { provide: 'WINDOW', useFactory: getWindowObject },
-      ],
+        { provide: 'WINDOW', useFactory: getWindowObject }
+      ]
     };
   }
 
   static forChild(): ModuleWithProviders<NgxWigModule> {
-    return {ngModule: NgxWigModule };
+    return { ngModule: NgxWigModule };
   }
 }
