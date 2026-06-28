@@ -14,7 +14,7 @@
           #toolbarButton
           type="button"
           class="nw-button"
-          [ngClass]="[button.styleClass]"
+          [class]="[button.styleClass]"
           [title]="button.title"
           [disabled]="disabled()"
           [attr.tabindex]="toolbarButtonIndex() === i ? 0 : -1"
@@ -25,7 +25,7 @@
           @if (button.icon) {
           <div
             class="nwe-icon"
-            [ngClass]="[button.icon]"
+            [class]="[button.icon]"
             aria-hidden="true"
             [attr.focusable]="false"
           ></div>
@@ -35,14 +35,14 @@
         </button>
         <div
           class="nwe-dropdown-content"
-          [ngClass]="button.visibleDropdown ? 'nwe-show' : ''"
+          [class]="button.visibleDropdown ? 'nwe-show' : ''"
         >
           @for (child of button.children; let j = $index; track child) {
           <a href="#">
             <button
               type="button"
               class="nw-button"
-              [ngClass]="[child.styleClass]"
+              [class]="[child.styleClass]"
               [title]="child.title"
               (click)="execCommand(child.command); closeDropdown(button)"
               [disabled]="disabled()"
@@ -54,7 +54,7 @@
               @if (child.icon) {
               <div
                 class="nwe-icon"
-                [ngClass]="[child.icon]"
+                [class]="[child.icon]"
                 aria-hidden="true"
                 [attr.focusable]="false"
               ></div>
@@ -72,7 +72,7 @@
           #toolbarButton
           type="button"
           class="nw-button"
-          [ngClass]="[button.styleClass]"
+          [class]="[button.styleClass]"
           [title]="button.title"
           (click)="execCommand(button.command)"
           [disabled]="disabled()"
@@ -84,7 +84,7 @@
           @if (button.icon) {
           <div
             class="nwe-icon"
-            [ngClass]="[button.icon]"
+            [class]="[button.icon]"
             aria-hidden="true"
             [attr.focusable]="false"
           ></div>
@@ -102,7 +102,7 @@
     class="nw-editor-container"
     (click)="container().focus()"
     (keydown.enter)="container().focus()"
-    [ngClass]="{ 'nw-editor-container--with-toolbar': toolbarButtons().length }"
+    [class]="{ 'nw-editor-container--with-toolbar': toolbarButtons().length }"
   >
     @if (editMode()) {
     <div class="nw-editor__src-container">
@@ -117,7 +117,7 @@
     }
     <div
       class="nw-editor"
-      [ngClass]="{ 'nw-disabled': disabled(),'nw-invisible': editMode() }"
+      [class]="{ 'nw-disabled': disabled(),'nw-invisible': editMode() }"
     >
       @if (shouldShowPlaceholder()) {
       <div class="nw-editor__placeholder" [innerText]="placeholder()"></div>
@@ -128,7 +128,7 @@
         role="textbox"
         aria-multiline="true"
         [attr.contenteditable]="!disabled()"
-        [ngClass]="{ disabled: disabled()}"
+        [class]="{ disabled: disabled()}"
         (paste)="onPaste($event)"
         (focus)="hasFocus.set(true)"
         (blur)="onBlur()"
