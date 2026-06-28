@@ -2,7 +2,6 @@ import { Service } from '@angular/core';
 
 @Service()
 export class NgxWigFilterService {
-  constructor() {}
   public filter(content: string): string {
     return this._cleanWordHtml(content);
   }

@@ -2,7 +2,6 @@ import { Service } from "@angular/core";
 
 @Service()
 export class NgxWigFilterStylesService {
-  constructor() {}
   public filter(htmlString: string): string {
     // Parse the HTML string into a DOM object
     const parser: DOMParser = new DOMParser();

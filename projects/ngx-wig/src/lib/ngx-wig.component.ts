@@ -16,7 +16,8 @@ import {
   signal,
   viewChild,
   viewChildren,
-  ChangeDetectionStrategy
+  ChangeDetectionStrategy,
+  inject
 } from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { CommandFunction, TButton } from "./config";
@@ -40,9 +41,11 @@ import { NgxWigToolbarService } from "./ngx-wig-toolbar.service";
   changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
-export class NgxWigComponent
-  implements OnInit, OnChanges, ControlValueAccessor
-{
+export class NgxWigComponent implements OnInit, OnChanges, ControlValueAccessor{
+  private _ngWigToolbarService = inject(NgxWigToolbarService);
+  private _filterService = inject(NgxWigFilterService, { optional: true });
+  private document = inject(DOCUMENT);
+
   public readonly content = model<string>();
 
   public readonly placeholder = input<string>();
@@ -76,14 +79,6 @@ export class NgxWigComponent
   private readonly toolbarButtonElems = viewChildren("toolbarButton", {
     read: ElementRef,
   });
-
-  public constructor(
-    private readonly _ngWigToolbarService: NgxWigToolbarService,
-    @Optional() private readonly _filterService: NgxWigFilterService,
-    // cannot set Document here - Angular issue - https://github.com/angular/angular/issues/20351
-    @Inject(DOCUMENT) private readonly document: Document,
-    @Inject("WINDOW") private readonly window: Window,
-  ) {}
 
   private executeCommand(command: string, value: string = ""): boolean {
     try {

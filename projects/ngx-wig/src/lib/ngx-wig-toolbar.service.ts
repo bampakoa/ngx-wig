@@ -1,15 +1,10 @@
-import { Inject, Service } from '@angular/core';
+import { inject, Inject, Service } from '@angular/core';
 import { TButtonLibrary, TButton, BUTTONS } from './config';
 
 @Service()
-export class NgxWigToolbarService {
-  private _defaultButtonsList: string[] = [];
-  private _buttonLibrary: TButtonLibrary;
-
-  constructor(@Inject(BUTTONS) buttonLibraryConfig: TButtonLibrary[]) {
-    this._buttonLibrary = buttonLibraryConfig.reduce((acc: TButtonLibrary, val: TButtonLibrary) => ({ ...acc, ...val }), {});
-    this._defaultButtonsList = Object.keys(this._buttonLibrary);
-  }
+export class NgxWigToolbarService { 
+  private _buttonLibrary = inject(BUTTONS).reduce((acc: TButtonLibrary, val: TButtonLibrary) => ({ ...acc, ...val }), {});
+  private _defaultButtonsList = Object.keys(this._buttonLibrary);
 
   public setButtons(buttons: string[]): void {
     if (!Array.isArray(buttons)) {
