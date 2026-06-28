@@ -6,7 +6,7 @@
     "start": "ng serve",
     "build": "ng build ngx-wig",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test ngx-wig --watch=false",
+    "test": "ng test ngx-wig --browsers=ChromeHeadless --watch=false",
     "lint": "ng lint ngx-wig"
   },
   "private": true,

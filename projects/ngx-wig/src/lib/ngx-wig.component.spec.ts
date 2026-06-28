@@ -1,4 +1,4 @@
-import { Component, signal, ViewChild, ChangeDetectionStrategy } from '@angular/core';
+import { Component, signal, ChangeDetectionStrategy, viewChild } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed, tick, waitForAsync } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 
@@ -14,7 +14,7 @@ const mockWindow = {};
     standalone: false
 })
 class TestNgModelHostComponent {
-  @ViewChild(NgxWigComponent) ngxWigCmp!: NgxWigComponent;
+  readonly ngxWigCmp = viewChild.required(NgxWigComponent);
 
   text = 'Fake content (ngModel)';
 }
@@ -28,7 +28,7 @@ class TestNgModelHostComponent {
     standalone: false
 })
 class TestHostComponent {
-  @ViewChild(NgxWigComponent) ngxWigCmp!: NgxWigComponent;
+  readonly ngxWigCmp = viewChild.required(NgxWigComponent);
 
   text = signal('Fake content');
 
@@ -462,26 +462,26 @@ describe('NgxWigComponent', () => {
     });
 
     it('should set the content', () => {
-      expect(component.ngxWigCmp.content()).toBe(component.text());
+      expect(component.ngxWigCmp().content()).toBe(component.text());
     });
 
     it('should set the placeholder', () => {
-      expect(component.ngxWigCmp.placeholder()).toBe('Enter some text');
+      expect(component.ngxWigCmp().placeholder()).toBe('Enter some text');
     });
 
     it('should set the toolbar buttons', () => {
-      expect(component.ngxWigCmp.toolbarButtons()).toEqual([
+      expect(component.ngxWigCmp().toolbarButtons()).toEqual([
         { label: 'B', title: 'Bold', command: 'bold', styleClass: 'nw-bold', icon: 'nwe-icon-bold' },
         { label: 'I', title: 'Italic', command: 'italic', styleClass: 'nw-italic', icon: 'nwe-icon-italic' }
       ]);
     });
 
     it('should set the disabled property', () => {
-      expect(component.ngxWigCmp.disabled()).toBe(false);
+      expect(component.ngxWigCmp().disabled()).toBe(false);
     });
 
     it('should emit content', () => {
-      component.ngxWigCmp.content.set('New fake content');
+      component.ngxWigCmp().content.set('New fake content');
       expect(component.text()).toBe('New fake content');
     });
 
@@ -525,7 +525,7 @@ describe('NgxWigComponent', () => {
 
     it('should set the content', waitForAsync(() => {
       fixture.whenStable().then(() => {
-        expect(component.ngxWigCmp.content()).toBe(component.text);
+        expect(component.ngxWigCmp().content()).toBe(component.text);
       });
     }));
 
