@@ -124,6 +124,16 @@
             ],
             "tsConfig": "projects/ngx-wig/tsconfig.spec.json"
           }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "projects/ngx-wig/**/*.ts",
+              "projects/ngx-wig/**/*.html"
+            ],
+            "eslintConfig": "projects/ngx-wig/eslint.config.js"
+          }
         }
       }
     }
