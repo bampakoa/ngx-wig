@@ -1,23 +1,17 @@
-<h1> Examples for ngx-wig </h1>
+<h1> Basic Examples </h1>
 
+<h2>Quick start</h2>
+<ngx-wig [content]="text" />
 
-<h2>Quick start </h2>
-<ngx-wig [content]="text"></ngx-wig>
+<h2>Placeholder</h2>
+<ngx-wig [placeholder]="'Enter instructions here.'" />
 
+<h2>Set buttons</h2>
+<ngx-wig [content]="text" [buttons]="'bold, italic'" />
 
-<h2>Placeholder </h2>
-<ngx-wig  [placeholder]="'Enter instructions here.'"></ngx-wig>
-
-
-
-<h2>Set buttons </h2>
-<ngx-wig  [content]="text" [buttons]="'bold, italic'"></ngx-wig>
-
-
-<h2>onContentChange Hook </h2>
-<ngx-wig [content]="text" (contentChange)="result = $event"></ngx-wig>
+<h2>onContentChange Hook</h2>
+<ngx-wig [content]="text" (contentChange)="result = $event" />
 <div [innerHTML]="result"></div>
 
-
-<h2>Reactive FormControl </h2>
-<ngx-wig  [formControl]="name" [buttons]="'bold, italic'"></ngx-wig>
+<h2>Reactive forms</h2>
+<ngx-wig [formControl]="name" [buttons]="'bold, italic'" />

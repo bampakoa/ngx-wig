@@ -9,9 +9,7 @@ import { NgxWigComponent } from './ngx-wig.component';
 const mockWindow = {};
 
 @Component({
-    template: `<ngx-wig
-    [(ngModel)]="text">
-  </ngx-wig>`,
+    template: `<ngx-wig [(ngModel)]="text" />`,
     changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
@@ -22,12 +20,10 @@ class TestNgModelHostComponent {
 }
 
 @Component({
-    template: `<ngx-wig
-    [(content)]="text"
+    template: `<ngx-wig [(content)]="text"
     placeholder="Enter some text"
     buttons="bold,italic"
-    [disabled]="false">
-  </ngx-wig>`,
+    [disabled]="false" />`,
     changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })

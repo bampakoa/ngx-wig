@@ -4,10 +4,10 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
+    "build": "ng build ngx-wig",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test --watch=false",
-    "lint": "ng lint"
+    "test": "ng test ngx-wig --watch=false",
+    "lint": "ng lint ngx-wig"
   },
   "private": true,
   "dependencies": {
