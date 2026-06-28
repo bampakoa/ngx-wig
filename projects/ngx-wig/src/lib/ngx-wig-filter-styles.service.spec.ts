@@ -1,10 +1,12 @@
+import { TestBed } from '@angular/core/testing';
 import { NgxWigFilterStylesService } from './ngx-wig-filter-styles.service';
 
 describe('NgxWigFilterStylesService', () => {
   let service: NgxWigFilterStylesService;
 
   beforeEach(() => {
-    service = new NgxWigFilterStylesService();
+    TestBed.configureTestingModule({});
+    service = TestBed.inject(NgxWigFilterStylesService);
   });
 
   it('should create an instance', () => {

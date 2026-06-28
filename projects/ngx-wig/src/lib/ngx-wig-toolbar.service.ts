@@ -1,9 +1,7 @@
-import { Injectable, Inject } from '@angular/core';
+import { Inject, Service } from '@angular/core';
 import { TButtonLibrary, TButton, BUTTONS } from './config';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Service()
 export class NgxWigToolbarService {
   private _defaultButtonsList: string[] = [];
   private _buttonLibrary: TButtonLibrary;

@@ -1,12 +1,19 @@
+import { TestBed } from '@angular/core/testing';
+
+import { BUTTONS, DEFAULT_LIBRARY_BUTTONS } from './config';
 import { NgxWigToolbarService } from './ngx-wig-toolbar.service';
-import { DEFAULT_LIBRARY_BUTTONS } from './config';
 
 describe('NgxWigToolbarService', () => {
   let service: NgxWigToolbarService;
 
   beforeEach(() => {
- service = new NgxWigToolbarService([DEFAULT_LIBRARY_BUTTONS]);
-});
+    TestBed.configureTestingModule({
+      providers: [
+        { provide: BUTTONS, useValue: DEFAULT_LIBRARY_BUTTONS, multi: true }
+      ]
+    });
+    service = TestBed.inject(NgxWigToolbarService);
+  });
 
   it('should set buttons', () => {
     service.setButtons(['list1', 'list2']);
