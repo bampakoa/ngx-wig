@@ -82,4 +82,4 @@ export const CUSTOM_LIBRARY_BUTTONS: TButtonLibrary = {
 };
 
 
-export const BUTTONS = new InjectionToken<TButton[][]>('BUTTONS');
+export const BUTTONS = new InjectionToken<TButtonLibrary[]>('BUTTONS');
